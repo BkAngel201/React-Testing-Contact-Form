@@ -57,7 +57,7 @@ const ContactForm = () => {
           <textarea data-testid="message" name="message" ref={register({ required: false })} />
         </div>
         {data && (
-          <pre role="json-response-print" style={{ textAlign: "left", color: "white" }}>
+          <pre data-testid="json-response-print" style={{ textAlign: "left", color: "white" }}>
             {JSON.stringify(data, null, 2)}
           </pre>
         )}

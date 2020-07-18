@@ -1,7 +1,7 @@
 import React from "react";
 import { render, act, fireEvent, waitFor } from "@testing-library/react";
 import App from "./App";
-import ContactForm from './components/ContactForm'
+import ContactForm, {onSubmit} from './components/ContactForm'
 
 test("renders App without crashing", () => {
   render(<App />);
@@ -71,33 +71,39 @@ test("first-name max length message displayed correctly", async () => {
   expect(paragraph[0].textContent).toMatch(/Looks like there was an error: maxLength/i)
 })
 
-// test ('POST response from API on submit', async () => {
-//   const { getByTestId, getByRole } = render(<ContactForm/>)
-//   const form = getByTestId("form")
+test ('POST response from API on submit', async () => {
+  const { getByTestId } = render(<ContactForm/>)
+  const form = getByTestId("form")
 
-//   const firstName = getByTestId("first-name")
-//   fireEvent.change(firstName, {
-//     target: {value: "Angel"}
-//   })
+  const firstName = getByTestId("first-name")
+  fireEvent.change(firstName, {
+    target: {value: "Angel"}
+  })
 
-//   const lastName = getByTestId("last-name")
-//   fireEvent.change(lastName, {
-//     target: {value: "Couso"}
-//   })
+  const lastName = getByTestId("last-name")
+  fireEvent.change(lastName, {
+    target: {value: "Couso"}
+  })
 
-//   const email = getByTestId("email")
-//   fireEvent.change(email, {
-//     target: {value: "angel@lambaschool.com"}
-//   })
+  const email = getByTestId("email")
+  fireEvent.change(email, {
+    target: {value: "angel@lambaschool.com"}
+  })
 
-//   const message = getByTestId("message")
-//   fireEvent.change(message, {
-//     target: {value: "Hello Word"}
-//   })
+  const message = getByTestId("message")
+  fireEvent.change(message, {
+    target: {value: "Hello Word"}
+  })
 
-//   await act(async() => {
-//     fireEvent.submit(form)
-//   })
-//   getByRole('json-response-print')
-// })
+  act(() => {
+    fireEvent.submit(form)
+  })
+  await waitFor(() => {
+    return getByTestId('json-response-print')
+  })
+  .then(result => {
+    expect(result).toHaveTextContent(/[\s\S]*/)
+  })
+  
+})
 
